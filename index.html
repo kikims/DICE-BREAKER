@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>DICE BEAKER</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative; /* 要素の位置を相対的に設定 */
+        }
+        #generateButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background-color: #ff69b4; /* 可愛らしい色: ピンク */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            animation: changeColor 0.5s forwards; /* 色が変わるアニメーション */
+        }
+        #promptDisplay {
+            padding: 20px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-width: 200px;
+            text-align: center;
+        }
+        @keyframes changeColor {
+            0% { background-color: #ff69b4; } /* ピンク色 */
+            100% { background-color: #007bff; } /* 青色 */
+        }
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff69b4; /* パーティクルの色 */
+            border-radius: 50%; /* 円形の形状 */
+            pointer-events: none;
+            z-index: 9999;
+            animation: fall 2s linear forwards;
+        }
+        @keyframes fall {
+            0% { opacity: 1; transform: translate(-50%, -50%); }
+            100% { opacity: 0; transform: translate(-50%, -50%) translate(calc(100vw * cos(var(--angle))), calc(100vh * sin(var(--angle)))); }
+        }
+    </style>
+</head>
+<body>
+
+<div id="promptDisplay">ROLL THE DICE TO GET TOPICS</div>
+<button id="generateButton">ROLL THE DICE</button>
+
+<script>
+    const generateButton = document.getElementById('generateButton');
+    const promptDisplay = document.getElementById('promptDisplay');
+
+    generateButton.addEventListener('click', () => {
+        // 色が変わるアニメーションのためにクラスを一度削除して再度追加
+        generateButton.classList.remove('changeColor');
+        void generateButton.offsetWidth; // リフローを発生させて再描画を行う
+        generateButton.classList.add('changeColor');
+
+        // パーティクルを生成
+        const numParticles = 30;
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const x = window.innerWidth / 2;
+            const y = window.innerHeight / 2;
+            const angle = Math.random() * 360; // パーティクルの移動角度（度）
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            particle.style.setProperty('--angle', `${angle}deg`); // CSS変数を使用して角度を渡す
+            document.body.appendChild(particle);
+
+            // パーティクルを非同期で削除
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }
+    });
+</script>
+
+</body>
+</html>
+
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
